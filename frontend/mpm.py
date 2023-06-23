@@ -162,11 +162,7 @@ class MPMcontroller(QObject):
         return self._window.cursor()
 
     def _set_cursor(self, shape):
-        if not shape:
-            qt_shape = QtCore.Qt.ArrowCursor
-        else:
-            qt_shape = eval("QtCore." + shape)
-
+        qt_shape = QtCore.Qt.ArrowCursor if not shape else eval(f"QtCore.{shape}")
         self._window.setCursor(QtGui.QCursor(qt_shape))
         self._nfy_cursor.emit()
 
@@ -181,12 +177,12 @@ def start():
     lang = locale.getlocale()[0]
     if lang != frontend.MPM_DEFAULT_LANG:
         translator = QtCore.QTranslator()
-        idir = "%s/i18n" % frontend.MPM_FRONTEND_DIR
-        ifile = "%s/mpm.%s" % (idir, lang)
+        idir = f"{frontend.MPM_FRONTEND_DIR}/i18n"
+        ifile = f"{idir}/mpm.{lang}"
         if translator.load(ifile, ":/"):
             app.installTranslator(translator)
         else:
-            logger.warning("No translation for '%s' has been found." % lang)
+            logger.warning(f"No translation for '{lang}' has been found.")
     view = QtDeclarative.QDeclarativeView()
     view.setResizeMode(QtDeclarative.QDeclarativeView.SizeRootObjectToView)
     view.setWindowTitle("Mandriva Package Manager")
@@ -196,11 +192,10 @@ def start():
     except Exception as e:
         raise ExceptionWrapper(e)
     else:
-        mainQML = '%s/%s' % (frontend.MPM_QML_DIR,
-                            os.path.basename(__file__.replace('.py', '.qml')))
+        mainQML = f"{frontend.MPM_QML_DIR}/{os.path.basename(__file__.replace('.py', '.qml'))}"
         if not os.path.exists(mainQML):
-            logger.critical("'%s' not found!" % mainQML)
-            raise FinalException("'%s' not found!" % mainQML)
+            logger.critical(f"'{mainQML}' not found!")
+            raise FinalException(f"'{mainQML}' not found!")
 
         view.setSource(mainQML)
         view.show()

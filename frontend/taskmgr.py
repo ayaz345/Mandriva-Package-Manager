@@ -78,10 +78,7 @@ class TaskManager(QtCore.QObject):
 
     # progress (read-only) attribute ------------
     def _get_progress(self):
-        if total > 0:
-            return float(self._processed)/float(self._total)
-        else:
-            return 0.0
+        return float(self._processed)/float(self._total) if total > 0 else 0.0
 
     _nfy_progress = QtCore.Signal()
 

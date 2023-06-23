@@ -26,6 +26,7 @@
 """ Script to run the mpm application. """
 
 
+
 import logging
 import sys
 import os
@@ -37,9 +38,7 @@ basename = os.path.basename(basedir)
 
 # Add the base directory to sys.path if we are running from package
 # directory (i.e. without installation):
-if basename == 'mpm' \
-   or basename == 'Mandriva-Package-Manager'  \
-   or basename == 'mpm-build-desktop':
+if basename in ['mpm', 'Mandriva-Package-Manager', 'mpm-build-desktop']:
     mpm_root_dir = basedir
 else:
     mpm_root_dir = '/usr/share/mandriva/mpm'
@@ -50,13 +49,12 @@ sys.path.append(mpm_root_dir)
 mdvpkg_root_dir = '/usr/share/mandriva/mdvpkg'
 if not os.path.exists(mdvpkg_root_dir):
     raise IOError, "'mdvpkg' seems to not be installed!"
-    quit()
 sys.path.append(mdvpkg_root_dir)
 
 if not os.environ.get('QML_IMPORT_PATH'):
     os.environ['QML_IMPORT_PATH'] = ''
 os.environ['QML_IMPORT_PATH'] += ':/usr/share/mandriva/qt-components/desktop'
-os.environ['QML_IMPORT_PATH'] += ':%s/frontend' % mpm_root_dir
+os.environ['QML_IMPORT_PATH'] += f':{mpm_root_dir}/frontend'
 
 # Parse command line arguments to configure and run mpm ...
 parser = OptionParser()
@@ -78,10 +76,7 @@ opts, args = parser.parse_args()
 
 import dbus
 from backend.mdvpkg import mdvpkgqt
-if opts.session:
-    bus = dbus.SessionBus()
-else:
-    bus = dbus.SystemBus()
+bus = dbus.SessionBus() if opts.session else dbus.SystemBus()
 mdvpkgqt.DbusProxy.initiateDbus(bus)
 
 

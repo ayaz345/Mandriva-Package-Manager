@@ -259,8 +259,8 @@ class PackageListProxy(QtCore.QObject):
         if not Set(sources).issubset(Set(('Mandriva', 'Community'))):
             raise MPMException("Unknown source", str(sources))
         filter_list = {True:[], False:[]}
-        includeMandriva = 'Mandriva' in sources
         if sources:
+            includeMandriva = 'Mandriva' in sources
             filter_list[includeMandriva] = MANDRIVA_MEDIAS
             filter_list[not includeMandriva] = []
         return filter_list[True], filter_list[False]
@@ -291,10 +291,7 @@ class PackageListProxy(QtCore.QObject):
 
     def _on_package(self, index, name, arch, mdvpkg_status, action, details):
         status = self._convert_status(mdvpkg_status)
-        if details['media'] in MANDRIVA_MEDIAS:
-            source = 'Mandriva'
-        else:
-            source = 'Community'
+        source = 'Mandriva' if details['media'] in MANDRIVA_MEDIAS else 'Community'
         group_folder = details['group'].split('/')[0]
         for (category, folders_set) in self._groups_map.iteritems():
             if group_folder in folders_set:
@@ -353,10 +350,10 @@ class PackageListProxy(QtCore.QObject):
         self._on_action_progress(ACTION_REMOVE_STEP, lambda progress: progress, *args)
 
     def _on_action_start(self, task_id, index, total, count):
-        package = self._check_valid_signal(task_id, index)
-        if not package:
+        if package := self._check_valid_signal(task_id, index):
+            self.action_started.emit(package, task_id)
+        else:
             return
-        self.action_started.emit(package, task_id)
 
     def _on_action_progress(self, step, progress_calc, task_id, index, amount, total):
         package = self._check_valid_signal(task_id, index)
@@ -378,19 +375,21 @@ class PackageListProxy(QtCore.QObject):
 
     def _populate_groups(self):
         self._groups_map = {
-            'Accessories': set(('Accessibility',
-                               'Archiving',
-                               'Editors',
-                               'File tools',
-                               'Text tools')),
-            'Development': set(('Development',)),
-            'Education': set(('Education',)),
-            'Games': set(('Games', 'Toys')),
-            'Internet': set(('Networking', 'Communications')),
-            'Office': set(('Office', 'Publishing')),
-            'Multimedia': set(('Video', 'Sound', 'Graphics')),
-            'Sciences': set(('Sciences',)),
-            'System': set()
+            'Accessories': {
+                'Accessibility',
+                'Archiving',
+                'Editors',
+                'File tools',
+                'Text tools',
+            },
+            'Development': {'Development'},
+            'Education': {'Education'},
+            'Games': {'Games', 'Toys'},
+            'Internet': {'Networking', 'Communications'},
+            'Office': {'Office', 'Publishing'},
+            'Multimedia': {'Video', 'Sound', 'Graphics'},
+            'Sciences': {'Sciences'},
+            'System': set(),
         }
         self._call_server_method('connect_to_signal', 'Group', self._on_group)
         self._call_server_method('GetAllGroups')

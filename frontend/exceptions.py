@@ -68,13 +68,13 @@ class FinalException(MPMException):
         try:
             raise self
         except NoServerResponse as e:
-            msgBox.setText("mdvpkgd is not responding! (%s)" % e.name)
+            msgBox.setText(f"mdvpkgd is not responding! ({e.name})")
             details = "Exception Name:  '%s'\n\nMessage:  '%s'\n\n%s" % \
-                        (e.name, str(e.message), details)
+                            (e.name, str(e.message), details)
         except FinalException as e:
-            msgBox.setText("A mpm/mdvpkg error was found! (%s)" % e.name)
+            msgBox.setText(f"A mpm/mdvpkg error was found! ({e.name})")
             details = "Exception Name:  '%s'\n\nMessage:  '%s'\n\n%s" % \
-                        (e.name, str(e.message), details)
+                            (e.name, str(e.message), details)
         except:
             msgBox.setText("An error was found!")
         finally:

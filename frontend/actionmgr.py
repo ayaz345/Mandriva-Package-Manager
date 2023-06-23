@@ -87,24 +87,20 @@ class ActionManager(QtCore.QObject):
 
     @QtCore.Slot(QtCore.QObject)
     def search(self, rawData):
-        filters = {}
-
         value = rawData.property('pattern')
-        filters[ActionManager.FILTER_MAP['pattern']] = \
-            [value] if value else []
-
+        filters = {ActionManager.FILTER_MAP['pattern']: [value] if value else []}
         value = rawData.property('category')
         filters[ActionManager.FILTER_MAP['category']] = \
-            [value] if value else []
+                [value] if value else []
 
         value = rawData.property('source')
         filters[ActionManager.FILTER_MAP['source']] = \
-            [value] if value else []
+                [value] if value else []
 
         value = rawData.property('status')
         value = ActionManager.STATUS_MAP.get(value)
         filters[ActionManager.FILTER_MAP['statuses']] = \
-            value if value else []
+                value if value else []
 
         value = rawData.property('sort')
         value = ActionManager.SORT_MAP.get(value)

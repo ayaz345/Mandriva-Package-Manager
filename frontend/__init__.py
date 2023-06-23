@@ -27,22 +27,22 @@ __state__   = "development"
 __version__ = "0.8.3"
 
 MANDRIVA_DATA_DIR = '/usr/share/mandriva'
-DEFAULT_MPM_DIR = '%s/mpm' % MANDRIVA_DATA_DIR
+DEFAULT_MPM_DIR = f'{MANDRIVA_DATA_DIR}/mpm'
 
 if os.environ['MPM_ROOT_DIR']:
     MPM_ROOT_DIR = os.environ['MPM_ROOT_DIR']
 else:
     MPM_ROOT_DIR = DEFAULT_MPM_DIR
 
-MPM_BACKEND_DIR = '%s/backend' % MPM_ROOT_DIR
-MPM_COMPONENTS_DIR = '%s/components' % MPM_ROOT_DIR
-MPM_FRONTEND_DIR = '%s/frontend' % MPM_ROOT_DIR
-MPM_QML_DIR = '%s/qml' % MPM_FRONTEND_DIR
-MPM_IMAGES_DIR = '%s/images' % MPM_FRONTEND_DIR
-MPM_CONFIG_DIR = '%s/config' % MPM_FRONTEND_DIR
-MPM_JAVASCRIPT_DIR = '%s/js' % MPM_FRONTEND_DIR
+MPM_BACKEND_DIR = f'{MPM_ROOT_DIR}/backend'
+MPM_COMPONENTS_DIR = f'{MPM_ROOT_DIR}/components'
+MPM_FRONTEND_DIR = f'{MPM_ROOT_DIR}/frontend'
+MPM_QML_DIR = f'{MPM_FRONTEND_DIR}/qml'
+MPM_IMAGES_DIR = f'{MPM_FRONTEND_DIR}/images'
+MPM_CONFIG_DIR = f'{MPM_FRONTEND_DIR}/config'
+MPM_JAVASCRIPT_DIR = f'{MPM_FRONTEND_DIR}/js'
 
-MPM_USER_CONFIG_DIR = '%s/.mandriva/mpm/' % os.environ['HOME']
+MPM_USER_CONFIG_DIR = f"{os.environ['HOME']}/.mandriva/mpm/"
 MPM_DEFAULT_LANG = 'en_US'
 
 logger = logging.getLogger(__name__)

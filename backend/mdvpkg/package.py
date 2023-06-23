@@ -48,13 +48,13 @@ class Package(QtCore.QObject):
     # Set attributes based on args -----
     def set_data(self, **kwargs):
         for key, valueS in kwargs.iteritems():
-            if isinstance(self.__dict__['_'+key], float):
+            if isinstance(self.__dict__[f'_{key}'], float):
                 value = float(valueS)
             else:
                 value = valueS
-            if self.__dict__['_'+key] != value:
-                self.__dict__['_'+key] = value
-                eval('self._nfy_'+key+'.emit()')
+            if self.__dict__[f'_{key}'] != value:
+                self.__dict__[f'_{key}'] = value
+                eval(f'self._nfy_{key}.emit()')
 
     # index attribute ----------
     def _get_index(self):
